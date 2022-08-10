@@ -14,6 +14,7 @@ export default function App() {
   let input = event.target.value;
   setTitle(input)
     if (regex.test(input)){
+      setMessageTwo('Here is your new URL')
       longUrl = url + input;
     }
     else{
