@@ -9,36 +9,49 @@ export default function App() {
   
   const [message, setMessage] = useState('');
   const [messageTwo, setMessageTwo] = useState('');
+  const [title, setTitle] = useState('')
   const handleChange = event => {
-    if (regex.test(event.target.value)){
-      longUrl = url + event.target.value;
+  let input = event.target.value;
+  setTitle(input)
+    if (regex.test(input)){
+      longUrl = url + input;
     }
     else{
-    setMessageTwo('This is not a valid URL');
+      setMessageTwo('This is not a valid URL');
+      setData('')
+
     }
-    setMessage(event.target.value);
+    setMessage(input);
   };
   
   
   const [isSending, setIsSending] = useState(false);
   const [data, setData] = useState([]);
   useEffect(() => {
+    console.log(title)
+
     if(isSending && typeof longUrl  !== "undefined"){
-      
-      fetch(longUrl)
-      .then(data => {
-        if (data.ok) {
-          return data.json()
-        } else if(data.status === 400) {
-          return Promise.reject('error 400')
-        } else {
-          return Promise.reject('some other error: ' + data.status)
-        }
-      }) 
-      .then((data) => setData(data.result.full_short_link))
-      .then(() => setIsSending(false));
-      setMessageTwo('Here is your new URL')
-      setIsSending(false);
+      if (regex.test(title)){
+        fetch(longUrl)
+        .then(data => {
+          if (data.ok) {
+            return data.json()
+          } else if(data.status === 400) {
+            return Promise.reject('error 400')
+          } else {
+            return Promise.reject('some other error: ' + data.status)
+          }
+        }) 
+        .then((data) => setData(data.result.full_short_link))
+        .then(() => setIsSending(false));
+        setMessageTwo('Here is your new URL')
+        setIsSending(false);
+      }
+      else{
+        setMessageTwo('This is not a valid URL')
+        setData('')
+      }
+
     }
     setIsSending(false);
     
