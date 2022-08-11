@@ -11,8 +11,8 @@ export default function App() {
   const [messageTwo, setMessageTwo] = useState('');
   const [titleinput, setTitle] = useState('')
   const handleChange = event => {
-  let input = event.target.value;
-  setTitle(input)
+    let input = event.target.value;
+    setTitle(input)
     if (regex.test(input)){
       setMessageTwo('Here is your new URL')
       longUrl = url + input;
@@ -21,11 +21,11 @@ export default function App() {
     else{
       setMessageTwo('This is not a valid URL');
       setData('')
-
+      
     }
     setMessage(input);
   };
-
+  
   const [isSending, setIsSending] = useState(false);
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function App() {
         setMessageTwo('This is not a valid URL')
         setData('')
       }
-
+      
     }
     setIsSending(false);
     
