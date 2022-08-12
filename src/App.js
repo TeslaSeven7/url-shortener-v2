@@ -6,6 +6,7 @@ var longUrl;
 var yolo;
 var obj1= {}
 var regex= /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
+var regexcomma= "([,])+"
 export default function App() {
   
   const [message, setMessage] = useState('');
@@ -60,7 +61,14 @@ export default function App() {
             localStorage.setItem("keys", uniquelocaltab);
           }
         });
-        yolo = localStorage.getItem("keys").split(",");
+        console.log(localStorage.getItem("keys"))
+        if(localStorage.getItem("keys").search(regexcomma)!= -1){
+
+          yolo = localStorage.getItem("keys").split(",");
+        }
+        else{
+          yolo = localStorage.getItem("keys")
+        }
         obj1 = Object.assign({}, yolo);
         setMessageTwo('Here is your new URL')
         
@@ -126,7 +134,7 @@ export default function App() {
     
     </div>
     <button onClick={buttonCheck}>Generate URL</button>
-        <h2><a href={yolo} target="_blank">{yolo}</a></h2>
+        <h2><a href={data} target="_blank">{data}</a></h2>
     
     
     </>
