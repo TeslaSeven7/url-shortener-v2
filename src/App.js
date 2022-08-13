@@ -28,6 +28,9 @@ export default function App() {
     setMessage(input);
   };
   const [data, setData] = useState([]);
+  const [localg, setLocalg] = useState([]);
+
+  
   
   
   
@@ -47,31 +50,14 @@ export default function App() {
         .then((data) => {
           setData(data.result.full_short_link);
           localtab.push(data.result.full_short_link)
-
+          allocateLocalStorage();
 
           
         })
         .then(response => {
           // handle the response
         })
-        let uniquelocaltab = [];
-        localtab.forEach((c) => {
-          if (!uniquelocaltab.includes(c)) {
-            uniquelocaltab.push(c);
-            localStorage.setItem("keys", uniquelocaltab);
-          }
-        });
-        console.log(localStorage.getItem("keys"))
-        if(localStorage.getItem("keys").search(regexcomma)!= -1){
-
-          yolo = localStorage.getItem("keys").split(",");
-        }
-        else{
-          yolo = localStorage.getItem("keys")
-        }
-        obj1 = Object.assign({}, yolo);
-        setMessageTwo('Here is your new URL')
-        
+       
     
         
       }
@@ -83,6 +69,28 @@ export default function App() {
     }
   }
   
+
+  function allocateLocalStorage(){
+    let uniquelocaltab = [];
+    localtab.forEach((c) => {
+      if (!uniquelocaltab.includes(c)) {
+        uniquelocaltab.push(c);
+        localStorage.setItem("keys", uniquelocaltab);
+      }
+    });
+    if(localStorage.getItem("keys").search(regexcomma)!= -1){
+      setLocalg(localStorage.getItem("keys").split(","))
+      //yolo = localStorage.getItem("keys").split(",");
+    }
+    else{
+      setLocalg(localStorage.getItem("keys"))
+
+      //yolo = localStorage.getItem("keys")
+    }
+    //obj1 = Object.assign({}, yolo);
+    setMessageTwo('Here is your new URL')
+    
+  }
   
   //const [isSending, setIsSending] = useState(false);
   
@@ -134,9 +142,7 @@ export default function App() {
     
     </div>
     <button onClick={buttonCheck}>Generate URL</button>
-        <h2><a href={data} target="_blank">{data}</a></h2>
-    
-    
+        <h2><a href={data} target="_blank">{localg}</a></h2>
     </>
     );
   }
