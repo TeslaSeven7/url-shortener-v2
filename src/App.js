@@ -6,9 +6,10 @@ var longUrl;
 var yolo;
 var obj1= {}
 var regex= /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/
-var regexcomma= "([,])+"
+var regexcomma= "([,])+";
+
+
 export default function App() {
-  
   const [message, setMessage] = useState('');
   const [messageTwo, setMessageTwo] = useState('');
   const [titleinput, setTitle] = useState('')
@@ -29,7 +30,7 @@ export default function App() {
   };
   const [data, setData] = useState([]);
   const [localg, setLocalg] = useState([]);
-
+  
   
   
   
@@ -49,17 +50,12 @@ export default function App() {
         }) 
         .then((data) => {
           setData(data.result.full_short_link);
-          localtab.push(data.result.full_short_link)
-          allocateLocalStorage();
-
           
         })
-        .then(response => {
-          // handle the response
+        .finally(() => {
+          localtab.push(data.result.full_short_link)
+          allocateLocalStorage();
         })
-       
-    
-        
       }
       else{
         setMessageTwo('This is not a valid URL')
@@ -69,64 +65,37 @@ export default function App() {
     }
   }
   
-
+  
   function allocateLocalStorage(){
     let uniquelocaltab = [];
     localtab.forEach((c) => {
       if (!uniquelocaltab.includes(c)) {
         uniquelocaltab.push(c);
-        localStorage.setItem("keys", uniquelocaltab);
+        localStorage.setItem("url", uniquelocaltab);
+        //console.log('include C')
+      }
+      else{
+        //console.log('not include C')
+        
       }
     });
-    if(localStorage.getItem("keys").search(regexcomma)!= -1){
-      setLocalg(localStorage.getItem("keys").split(","))
-      //yolo = localStorage.getItem("keys").split(",");
+    if(localStorage.getItem("url").search(",")!= -1){
+      setMessageTwo('Here is your new URL')
+      return setLocalg(localStorage.getItem("url").split(","))
+      //console.log(typeof(localg))
+      // console.log(localg)
+      
     }
     else{
-      setLocalg(localStorage.getItem("keys"))
-
-      //yolo = localStorage.getItem("keys")
+      setMessageTwo('Here is your new URL')
+      return setLocalg(localStorage.getItem("url"))
+      //console.log("1tem")
     }
     //obj1 = Object.assign({}, yolo);
-    setMessageTwo('Here is your new URL')
     
   }
   
-  //const [isSending, setIsSending] = useState(false);
-  
-  // useEffect(() => {
-  //   if(isSending && typeof longUrl  !== "undefined"){
-  //     if (regex.test(titleinput)){
-  //       fetch(longUrl)
-  //       .then(data => {
-  //         if (data.ok) {
-  //           return data.json()
-  //         } else if(data.status === 400) {
-  //           return Promise.reject('error 400')
-  //         } else {
-  //           return Promise.reject('some other error: ' + data.status)
-  //         }
-  //       }) 
-  //       .then((data) => setData(data.result.full_short_link))
-  //       .then(() => setIsSending(false));
-  //       setMessageTwo('Here is your new URL')
-  //       setIsSending(false);
-  //       localindex++;
-  //     }
-  //     else{
-  //       setMessageTwo('This is not a valid URL')
-  //       setData('')
-  //     }
-  
-  //   }
-  //   setIsSending(false);
-  
-  
-  // }, [isSending]);
-  // console.log(localindex)
-  // let localkey = localstore + localindex
-  // localStorage.setItem(localkey, data);
-  //<h3>{localStorage.getItem(localkey, data)}</h3>
+
   return (
     <>
     <div>
@@ -138,12 +107,20 @@ export default function App() {
     value={message}
     />
     
-    <h2>Message: {messageTwo}</h2>
+    <h2 onLoad={allocateLocalStorage}>Message: {messageTwo}</h2>
     
     </div>
     <button onClick={buttonCheck}>Generate URL</button>
-        <h2><a href={data} target="_blank">{localg}</a></h2>
-    </>
-    );
-  }
-  
+    {Object.values(localg).map((value, index) => {
+        return (
+          <div key={index}>
+            <h2>{value}</h2>
+          </div>
+        );
+      })}
+
+      <h2><a href={data} target="_blank">{localg}</a></h2>
+      </>
+      );
+    }
+    
